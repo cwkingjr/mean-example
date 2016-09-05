@@ -1,0 +1,8 @@
+{
+  // file shuts up VS Code complaining for config file
+
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+	"root": true
+}
