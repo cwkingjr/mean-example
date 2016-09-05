@@ -1,0 +1,21 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "env": {
+    "node": true,
+    "jasmine": true
+  },
+  "globals": {
+    "module": true,
+    "inject": true
+  },
+  "plugins": [
+    "jasmine"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:jasmine/recommended"
+  ]
+}
+
