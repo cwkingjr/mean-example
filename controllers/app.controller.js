@@ -11,13 +11,12 @@ router.use('/', function (req, res, next) {
     next();
 });
 
-// make JWT token available to angular app
-// secure: true
+// make JWT token available to angular api
 router.get('/token', function (req, res) {
 	res.cookie('auth_token', 'jwt_token_content', {
 		expire : new Date() + 9999,
-		httpOnly: true,
-		secure: true
+		httpOnly: true
+		//secure: true
 		}
 	);
     res.send(req.session.token);
