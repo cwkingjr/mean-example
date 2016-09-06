@@ -3,6 +3,7 @@ var router = express.Router();
 
 // use session auth to secure the angular app files
 router.use('/', function (req, res, next) {
+	console.log(req.path, 'auth_cookie:', req.cookies.auth_token);
     if (req.path !== '/login' && !req.session.token) {
         return res.redirect('/login?returnUrl=' + encodeURIComponent('/app' + req.path));
     }
@@ -11,7 +12,14 @@ router.use('/', function (req, res, next) {
 });
 
 // make JWT token available to angular app
+// secure: true
 router.get('/token', function (req, res) {
+	res.cookie('auth_token', 'jwt_token_content', {
+		expire : new Date() + 9999,
+		httpOnly: true,
+		secure: true
+		}
+	);
     res.send(req.session.token);
 });
 

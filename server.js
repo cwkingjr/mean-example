@@ -3,6 +3,8 @@ var express = require('express');
 var app = express();
 var session = require('express-session');
 var bodyParser = require('body-parser');
+//var Cookies = require('cookies');
+var cookieParser = require('cookie-parser');
 var expressJwt = require('express-jwt');
 var config = require('config.json');
 
@@ -10,7 +12,13 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
+
+app.use('/api', function(req, res, next){
+	console.log(req.path, 'auth_cookie:', req.cookies.auth_token);
+	next();
+});
 
 // use JWT auth to secure the api
 app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register'] }));

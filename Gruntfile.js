@@ -12,9 +12,7 @@ module.exports = function (grunt) {
 					configFile: '.eslintrc.browser.json'
 				},
 				src: [
-					// commenting out for now since I don't want to deal with the
-					// angular linting errrors that came with the demo code
-					//'app/**/*.js'
+					'app/**/*.js'
 				]
 			},
 			jasmine: {
