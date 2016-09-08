@@ -1,9 +1,7 @@
 ﻿require('rootpath')();
-var express = require('express');
-var app = express();
+var app = require('express')();
 var session = require('express-session');
 var bodyParser = require('body-parser');
-//var Cookies = require('cookies');
 var cookieParser = require('cookie-parser');
 var expressJwt = require('express-jwt');
 var config = require('config.json');
@@ -15,13 +13,23 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
 
-app.use('/api', function(req, res, next){
-	console.log(req.path, 'auth_cookie:', req.cookies.auth_token);
-	next();
-});
-
-// use JWT auth to secure the api
-app.use('/api', expressJwt({ secret: config.secret }).unless({ path: ['/api/users/authenticate', '/api/users/register'] }));
+// use JWT auth to secure the api via auth_token cookie
+app.use('/api', expressJwt({
+		secret: config.secret,
+		credentialsRequired: false,
+		getToken: function fromCookie (req) {
+			if (req.cookies.auth_token){
+    			return req.cookies.auth_token;
+			}else{
+				return null;
+			}
+		}
+	}).unless({
+		path: [
+			'/api/users/authenticate',
+			'/api/users/register'
+		]
+	}));
 
 // routes
 app.use('/login', require('./controllers/login.controller'));

@@ -16,7 +16,7 @@ function authenticateUser(req, res) {
         .then(function (token) {
             if (token) {
                 // authentication successful
-                res.send({ token: token });
+				res.send({ token: token });
             } else {
                 // authentication failed
                 res.status(401).send('Username or password is incorrect');

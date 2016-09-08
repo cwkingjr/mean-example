@@ -1,25 +1,15 @@
 ﻿var express = require('express');
 var router = express.Router();
 
-// use session auth to secure the angular app files
+// use auth_token cookie to secure the angular /app files
+//TODO this needs to be reworked since someone could spoof
+//a legitimate cookie named auth_token. Need to actually verify
+//the cookie
 router.use('/', function (req, res, next) {
-	console.log(req.path, 'auth_cookie:', req.cookies.auth_token);
-    if (req.path !== '/login' && !req.session.token) {
+	if (!req.cookies.auth_token) {
         return res.redirect('/login?returnUrl=' + encodeURIComponent('/app' + req.path));
     }
-
     next();
-});
-
-// make JWT token available to angular api
-router.get('/token', function (req, res) {
-	res.cookie('auth_token', 'jwt_token_content', {
-		expire : new Date() + 9999,
-		httpOnly: true
-		//secure: true
-		}
-	);
-    res.send(req.session.token);
 });
 
 // serve angular app files from the '/app' route
